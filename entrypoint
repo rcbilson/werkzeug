@@ -3,6 +3,6 @@
 if [ $# -gt 0 ];then
   exec "$@"
 else
-  zsh -i --login -c "tmux new -d"
-  while kill -0 $(pidof tmux); do sleep 10; done
+  sudo tailscale up -auth-key=file:/etc/ts_auth -ssh
+  while :; do sleep 60; done
 fi
