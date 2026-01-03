@@ -4,6 +4,6 @@ if [ $# -gt 0 ];then
   exec "$@"
 else
   tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &
-  tailscale up -auth-key=file:/etc/ts_auth -ssh
+  tailscale up -auth-key=file:/etc/ts_auth/TS_AUTH -ssh
   while :; do sleep 60; done
 fi
