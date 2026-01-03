@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ $# -gt 0 ];then
+  exec "$@"
+else
+  zsh -i --login -c "tmux new -d"
+  while kill -0 $(pidof tmux); do sleep 10; done
+fi
