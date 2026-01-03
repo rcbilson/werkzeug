@@ -45,8 +45,7 @@ RUN apt-get update && apt-get install -y \
 	zsh
 
 # Install yarn & aws-cli
-RUN npm install -g yarn && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     sudo ./aws/install && \
     rm -r awscliv2.zip aws
