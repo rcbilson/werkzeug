@@ -4,7 +4,7 @@ if [ $# -gt 0 ];then
   exec "$@"
 else
   tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=$TS_SOCK &
-  tmux new-session -c ~/vimwiki -s vimwiki -d -- vim -c VimwikiIndex
+  zsh -i --login -c "tmux tmux new-session -c ~/vimwiki -s vimwiki -d -- vim -c VimwikiIndex"
   tailscale up -auth-key=file:/etc/ts_auth/TS_AUTH -ssh --socket=$TS_SOCK
   while :; do sleep 60; done
 fi
