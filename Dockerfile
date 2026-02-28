@@ -12,21 +12,10 @@ RUN apt-get update && apt-get -y upgrade && \
     usermod -aG sudo richard && \
     echo "richard ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-# Add kubernetes PPA
-RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg &&\
-    sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
-    sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
-
-# Add helm PPA
-RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/helm.gpg &&\
-    echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-
 RUN apt-get update && apt-get install -y \
 	git \
 	golang-go \
-	helm \
-        kubectl \
+        jq \
 	npm \
         openssh-server \
 	sqlite3 \
@@ -44,14 +33,15 @@ RUN apt-get update && apt-get install -y \
         zoxide \
 	zsh
 
-# Install yarn & aws-cli
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    sudo ./aws/install && \
-    rm -r awscliv2.zip aws
+# Homebrew
+RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Tailscale
-RUN curl -fsSL https://tailscale.com/install.sh | sh
+RUN brew install \
+        k9s \
+        helm \
+        kubectl \
+        awscli \
+        yarn
 
 COPY entrypoint /entrypoint
 
