@@ -33,6 +33,8 @@ RUN apt-get update && apt-get install -y \
         zoxide \
 	zsh
 
+USER 1000:1000
+
 # Homebrew
 RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
@@ -45,7 +47,6 @@ RUN brew install \
 
 COPY entrypoint /entrypoint
 
-USER 1000:1000
 ENV SHELL=/usr/bin/zsh
 ENV TERM=xterm-256color
 ENV LANG=C.UTF-8
