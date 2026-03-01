@@ -38,7 +38,7 @@ USER 1000:1000
 # Homebrew
 RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-RUN brew install \
+RUN /home/linuxbrew/.linuxbrew/bin/brew install \
         k9s \
         helm \
         kubectl \
