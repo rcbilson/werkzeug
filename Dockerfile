@@ -46,6 +46,7 @@ RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/instal
 USER root
 RUN chown -R richard: /home/linuxbrew/.linuxbrew
 
+USER 1000
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
 RUN brew install \
         k9s \
