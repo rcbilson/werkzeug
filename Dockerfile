@@ -33,12 +33,21 @@ RUN apt-get update && apt-get install -y \
         zoxide \
 	zsh
 
-USER 1000:1000
-
 # Homebrew
-RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-RUN /home/linuxbrew/.linuxbrew/bin/brew install \
+RUN useradd -m -s /bin/zsh linuxbrew && \
+    usermod -aG sudo linuxbrew &&  \
+    mkdir -p /home/linuxbrew/.linuxbrew && \
+    chown -R linuxbrew: /home/linuxbrew/.linuxbrew
+
+USER linuxbrew
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+USER root
+RUN chown -R richard: /home/linuxbrew/.linuxbrew
+
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+RUN brew install \
         k9s \
         helm \
         kubectl \
