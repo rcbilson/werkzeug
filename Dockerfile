@@ -44,7 +44,7 @@ USER linuxbrew
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 USER root
-RUN chown -R richard: /home/linuxbrew/.linuxbrew
+RUN chown -R 1000:1000 /home/linuxbrew/.linuxbrew
 
 USER 1000
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
