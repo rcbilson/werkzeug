@@ -54,7 +54,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "aws
 RUN curl -fsSL https://tailscale.com/install.sh | sh
 
 # k9s
-RUN curl "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_linux_arm64.deb" -o "k9s_linux_arm64.deb" && \
+RUN curl --location "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_linux_arm64.deb" -o "k9s_linux_arm64.deb" && \
     dpkg -i k9s_linux_arm64.deb && \
     rm k9s_linux_arm64.deb
 
