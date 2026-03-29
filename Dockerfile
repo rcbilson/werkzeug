@@ -12,10 +12,21 @@ RUN apt-get update && apt-get -y upgrade && \
     usermod -aG sudo richard && \
     echo "richard ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
+# Add kubernetes PPA
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg &&\
+    sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
+    sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
+
+# Add helm PPA
+RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/helm.gpg &&\
+    echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+
 RUN apt-get update && apt-get install -y \
 	git \
 	golang-go \
-        jq \
+	helm \
+        kubectl \
 	npm \
         openssh-server \
 	sqlite3 \
@@ -33,30 +44,18 @@ RUN apt-get update && apt-get install -y \
         zoxide \
 	zsh
 
-# Homebrew
+# Install yarn & aws-cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    sudo ./aws/install && \
+    rm -r awscliv2.zip aws
 
-RUN useradd -m -s /bin/zsh linuxbrew && \
-    usermod -aG sudo linuxbrew &&  \
-    mkdir -p /home/linuxbrew/.linuxbrew && \
-    chown -R linuxbrew: /home/linuxbrew/.linuxbrew
-
-USER linuxbrew
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-USER root
-RUN chown -R 1000:1000 /home/linuxbrew
-
-USER 1000
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
-RUN brew install \
-        k9s \
-        helm \
-        kubectl \
-        awscli \
-        yarn
+# Tailscale
+RUN curl -fsSL https://tailscale.com/install.sh | sh
 
 COPY entrypoint /entrypoint
 
+USER 1000:1000
 ENV SHELL=/usr/bin/zsh
 ENV TERM=xterm-256color
 ENV LANG=C.UTF-8
