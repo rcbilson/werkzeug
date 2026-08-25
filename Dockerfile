@@ -38,6 +38,8 @@ RUN apt-get update && apt-get install -y \
 	man-db \
         mandoc \
         podman \
+		python3-requests \
+		python3-yaml \
         silversearcher-ag \
         sudo \
         unzip \
@@ -50,11 +52,8 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "aws
     sudo ./aws/install && \
     rm -r awscliv2.zip aws
 
-# Tailscale
-RUN curl -fsSL https://tailscale.com/install.sh | sh
-
 # k9s
-RUN curl --location "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_linux_arm64.deb" -o "k9s_linux_arm64.deb" && \
+RUN curl --location "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_linux_arm64.deb" -o "k9s_linux_arm64.deb" && \
     dpkg -i k9s_linux_arm64.deb && \
     rm k9s_linux_arm64.deb
 
