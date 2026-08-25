@@ -9,9 +9,6 @@ on:
   pull_request:
     branches:
       - main
-  schedule:
-    - cron: "23 1 * * *"
-      timezone: "America/Toronto"
 
 env:
   REGISTRY: ghcr.io
